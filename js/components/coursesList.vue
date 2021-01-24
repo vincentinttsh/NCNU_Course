@@ -53,17 +53,12 @@ var coursesList = {
             this.selectedTime = temp
         },
         'find_name': function () {
-            var temp = []
-            for (var c of this.courses) {
-                if (c.name.indexOf(this.find_name) != -1) {
-                    temp.push(c)
-                }
-            }
-            this.foundedCourses = temp
+            const target = this.find_name.toLowerCase();
+            this.foundedCourses = this.courses.filter((c) => c.name.toLowerCase().includes(target));
         }
     },
     template: `
-    <div class="mx-auto mb-4 border">
+    <div class="mx-auto mb-4">
 		<h5>2. 安排課程</h5>
 		<p style="color: orange" v-if="find_name"> ※ 已套用「名稱」搜尋： <br>{{find_name}}</p>
 		<div style="width:275px;height:500px;overflow:auto">
@@ -74,7 +69,7 @@ var coursesList = {
 						<td>
 							<div class="container row py-2 px-0">
 								<div class="col-12 pr-1">
-									<b>{{ course.name }} (<a v-bind:href="course.link">詳</a>)</b>
+									<b>{{ course.name }} (<a v-bind:href="course.link" target="_blank">詳</a>)</b>
 									—— {{ (course.department.indexOf(', ')!=-1) ?(course.department.split(', ')[1]) :(course.department) }}
 								</div>
 								<div class="col-sm-8 pr-1">
@@ -96,7 +91,7 @@ var coursesList = {
 						<td>
                         <div class="container row py-2 px-0">
                             <div class="col-12 pr-1">
-                                <b>{{ course.name }} (<a v-bind:href="course.link">詳</a>)</b>
+                                <b>{{ course.name }} (<a v-bind:href="course.link" target="_blank">詳</a>)</b>
                             </div>
                             <div class="col-sm-8 pr-1">
                                 {{ course.teacher }} ‧ {{ course.time }} 
