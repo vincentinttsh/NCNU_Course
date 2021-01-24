@@ -1,12 +1,13 @@
 var courseDiv = {
-    props: ['course', 'is_shared'],
+    props: ['course', 'is_shared', 'is_print'],
     template: `
         <div style='border: 5px #1abc9c solid; text-align: center;'>
             {{ course.name }}
             <button type="button" 
                 v-if="!is_shared"
-                v-on:click="$emit('remove-course', course.name)"
+                v-on:click="$emit('remove-course', course)"
                 class="btn btn-danger btn-sm"
+                :style="{'display': is_print ? 'none' : 'inline-block'}"
             >
                 刪
             </button>
@@ -22,7 +23,7 @@ var tempDiv = {
     `
 }
 var courseTable = {
-    props: ['select_c', 'is_shared'],
+    props: ['select_c', 'is_shared', 'is_print'],
     data: function(){
         return {
             'courses': {},
@@ -51,6 +52,8 @@ var courseTable = {
             for(var c of this.select_c){
                 this.courses[c.time] = {
                     'name': c.name,
+                    'number': c.number,
+                    'class': c.class,
                     'temp': c.temp
                 }
 
@@ -112,6 +115,7 @@ var courseTable = {
                         v-if="exist(week+String.fromCharCode(97+((hour<5)?(hour-1):(hour-2)))) && !courses[week+String.fromCharCode(97+((hour<5)?(hour-1):(hour-2)))].temp"
                         v-bind:course="courses[week+String.fromCharCode(97+((hour<5)?(hour-1):(hour-2)))]"
                         v-bind:is_shared="is_shared"
+                        v-bind:is_print="is_print"
                         v-on:remove-course="removeCourseHandler"
                     ></course-div>
                     <temp-div 
